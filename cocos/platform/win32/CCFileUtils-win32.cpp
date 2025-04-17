@@ -336,7 +336,7 @@ string FileUtilsWin32::getWritablePath() const
     // Get filename of executable only, e.g. MyGame.exe
     WCHAR *base_name = wcsrchr(full_path, '\\');
     wstring retPath;
-    if(base_name)
+    if(false && base_name)
     {
         WCHAR app_data_path[CC_MAX_PATH + 1];
 
