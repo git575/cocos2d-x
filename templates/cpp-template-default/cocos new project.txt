@@ -1,4 +1,5 @@
 git clone https://github.com/cocos2d/cocos2d-x.git
+conda create -n cocosEnv python=2.7
 python download-deps.py
 
 cocos new --help   查看cocos new 帮助
