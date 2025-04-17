@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -23,20 +23,22 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
-
+#include "StartScene.h"
 // #define USE_AUDIO_ENGINE 1
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
+using namespace cocos2d::experimental;
 #endif
 
 USING_NS_CC;
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size designResolutionSize = cocos2d::Size(720, 1280);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
+// TODO: Modify Project Name
+std::string PROJECT_NAME = "";
 
 AppDelegate::AppDelegate()
 {
@@ -67,14 +69,19 @@ static int register_all_packages()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+
+    // add search path
+    PulicSetFileSearchPath(PROJECT_NAME);
+
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("HelloCpp", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        //1080 1920   1080 2160
+        glview = GLViewImpl::createWithRect(PROJECT_NAME, cocos2d::Rect(0, 0, 540, 960));
 #else
-        glview = GLViewImpl::create("HelloCpp");
+        glview = GLViewImpl::create(PROJECT_NAME);
 #endif
         director->setOpenGLView(glview);
     }
@@ -107,8 +114,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-
+    auto scene = StartScene::createScene();
+    
     // run
     director->runWithScene(scene);
 

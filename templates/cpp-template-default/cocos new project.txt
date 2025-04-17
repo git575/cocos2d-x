@@ -1,0 +1,15 @@
+git clone https://github.com/cocos2d/cocos2d-x.git
+python download-deps.py
+
+cocos new --help   查看cocos new 帮助
+cocos new <project_name项目名> -p <package idectifier包名> -l<language语言(cpp lua js)> -d <location路径>
+
+cd 项目路径
+cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios android)>
+
+项目调试时不会复制Resouces目录下文件到输出目录  -->   修改.vcxproj文件，增加
+<ItemGroup>
+<XXXClInclude Include="..\Resources\**" />
+</ItemGroup>
+
+

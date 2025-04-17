@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -26,8 +26,9 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "Public/PublicBaseGame.h"
 
-class HelloWorld : public cocos2d::Scene
+class StartScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -38,7 +39,7 @@ public:
     void menuCloseCallback(cocos2d::Ref* pSender);
     
     // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(StartScene);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

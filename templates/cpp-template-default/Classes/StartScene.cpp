@@ -22,43 +22,45 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef  _APP_DELEGATE_H_
-#define  _APP_DELEGATE_H_
+#include "StartScene.h"
 
-#include "cocos2d.h"
+USING_NS_CC;
 
-/**
-@brief    The cocos2d Application.
-
-Private inheritance here hides part of interface from Director.
-*/
-class  AppDelegate : private cocos2d::Application
+Scene* StartScene::createScene()
 {
-public:
-    AppDelegate();
-    virtual ~AppDelegate();
+    return StartScene::create();
+}
 
-    virtual void initGLContextAttrs();
+// Print useful error message instead of segfaulting when files are not there.
+static void problemLoading(const char* filename)
+{
+    printf("Error while loading: %s\n", filename);
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+}
 
-    /**
-    @brief    Implement Director and Scene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
-    virtual bool applicationDidFinishLaunching();
+// on "init" you need to initialize your instance
+bool StartScene::init()
+{
+    //////////////////////////////
+    // 1. super init first
+    if ( !Scene::init() )
+    {
+        return false;
+    }
 
-    /**
-    @brief  Called when the application moves to the background
-    @param  the pointer of the application
-    */
-    virtual void applicationDidEnterBackground();
+    return true;
+}
 
-    /**
-    @brief  Called when the application reenters the foreground
-    @param  the pointer of the application
-    */
-    virtual void applicationWillEnterForeground();
-};
 
-#endif // _APP_DELEGATE_H_
+void StartScene::menuCloseCallback(Ref* pSender)
+{
+    //Close the cocos2d-x game scene and quit the application
+    Director::getInstance()->end();
 
+    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
+
+    //EventCustom customEndEvent("game_scene_close_event");
+    //_eventDispatcher->dispatchEvent(&customEndEvent);
+
+
+}
