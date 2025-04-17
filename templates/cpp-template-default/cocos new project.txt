@@ -5,6 +5,12 @@ python download-deps.py
 cocos new --help   查看cocos new 帮助
 cocos new <project_name项目名> -p <package idectifier包名> -l<language语言(cpp lua js)> -d <location路径>
 
+添加spine
+拷贝spine-runtimes 到 项目目录
+修改CmakeList.txt
+  在 project(${APP_NAME}) 后增加 include(/path/to/spine-runtimes/spine-cocos2dx/spine-cocos2dx.cmake)
+  在 target_link_libraries(${APP_NAME} cocos2d) 前增加 target_link_libraries(${APP_NAME} spine-cpp spine-cocos2dx)
+
 cd 项目路径
 cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios android)>
 
@@ -12,5 +18,3 @@ cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios an
 <ItemGroup>
 <XXXClInclude Include="..\Resources\**" />
 </ItemGroup>
-
-
