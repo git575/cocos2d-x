@@ -24,11 +24,13 @@
 
 #include "AppDelegate.h"
 #include "StartScene.h"
-// #define USE_AUDIO_ENGINE 1
+//#define USE_AUDIO_ENGINE 1
+
+#include "Public/PublicBaseHelper.h"
 
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
-using namespace cocos2d::experimental;
+//using namespace cocos2d::experimental;
 #endif
 
 USING_NS_CC;
@@ -70,9 +72,6 @@ static int register_all_packages()
 
 bool AppDelegate::applicationDidFinishLaunching() {
 
-    // add search path
-    PulicSetFileSearchPath(PROJECT_NAME);
-
     // initialize director
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
@@ -112,10 +111,13 @@ bool AppDelegate::applicationDidFinishLaunching() {
     }
 
     register_all_packages();
-
+    // 预加载按钮点击音效
+    std::string default_btn_effect = "sound/button_click.mp3";
+    PublicStatic::setString("PUBLIC_SOUND_EFFECT", default_btn_effect);
+    PublicPreloadEffect(std::vector<std::string>{default_btn_effect});
     // create a scene. it's an autorelease object
     auto scene = StartScene::createScene();
-    
+
     // run
     director->runWithScene(scene);
 
