@@ -1,6 +1,4 @@
-# Prerequisites
-*.d
-
+!cocos2d/
 # Compiled Object files
 *.slo
 *.lo
@@ -20,13 +18,36 @@
 *.mod
 *.smod
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
 # Executables
 *.exe
-*.out
-*.app
+
+# Cmake files
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+*.dir
+
+# cocos
+engine/
+
+# VS
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+lib/Debug/
+win32/Debug/
+bin/
+.vs/
+
+# spine
+spine-cocos2dx.lib
+spine-cocos2dx.pdb
+spine-cpp.lib
+spine-cpp.pdb
+
+# game
+BlockBlast.exp
+BlockBlast.lib
+*.log

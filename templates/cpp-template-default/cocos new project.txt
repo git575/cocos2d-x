@@ -18,3 +18,10 @@ cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios an
 <ItemGroup>
 <XXXClInclude Include="..\Resources\**" />
 </ItemGroup>
+
+
+
+Android项目需求
+jdk       8
+ndk      21
+gradle  gradle-5.1.1-all.zip
