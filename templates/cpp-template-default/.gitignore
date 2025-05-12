@@ -51,3 +51,5 @@ spine-cpp.pdb
 BlockBlast.exp
 BlockBlast.lib
 *.log
+
+/cocos2d/cocos/platform/android/libcocos2dx/build

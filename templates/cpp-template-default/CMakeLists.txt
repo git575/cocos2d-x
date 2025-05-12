@@ -28,6 +28,7 @@ cmake_minimum_required(VERSION 3.6)
 set(APP_NAME HelloCpp)
 
 project(${APP_NAME})
+include(./spine-runtimes/spine-cocos2dx/spine-cocos2dx.cmake)
 
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
@@ -124,6 +125,7 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+target_link_libraries(${APP_NAME} spine-cpp spine-cocos2dx)
 target_link_libraries(${APP_NAME} cocos2d)
 target_include_directories(${APP_NAME}
         PRIVATE ${GAME_INCLUDE}

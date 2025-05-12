@@ -22,6 +22,6 @@ cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios an
 
 
 Android项目需求
-jdk       8
-ndk      21
-gradle  gradle-5.1.1-all.zip
+jdk       8       setting -> gradle -> path_to_jdk_8
+ndk      21     local.properties -> 增加 ndk.dir=path_to_ndk_21
+gradle  gradle-5.1.1-all.zip  自动下载
