@@ -14,7 +14,7 @@ void PublicStartGame(const std::string& gameName)
 	{
 #ifdef BLOCK_BLAST
 		PublicInitGame("BlockBlast");
-		PublicStatistic::getInstance()->init("config/BlockBlastStatistic.json");
+		PublicGameStatistic::getInstance()->init("config/BlockBlastStatistic.json");
 		BlockBlastDataManage::getInstance()->init();
 		BlockBlastAchievementManager::getInstance()->init();
 		PublicPreloadEffect(std::vector<std::string>{});

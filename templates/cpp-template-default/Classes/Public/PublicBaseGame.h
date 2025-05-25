@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "cocos2d.h"
 #include "ui/UIButton.h"
+#include "PublicSupport.h"
 
 // 滚动数字
 // TODO: 非线性增长
@@ -60,6 +61,28 @@ protected:
 	virtual void releaseUpEvent()override;
 private:
 	std::string m_sClickEffect;
+};
+
+class VideoButton : public ButtonBase, public PublicObserver {
+public:
+	VideoButton();
+
+	static VideoButton* create(const std::string& normalImage,
+		const std::string& selectedImage = "",
+		const std::string& disableImage = "",
+		TextureResType texType = TextureResType::LOCAL,
+		std::function<void()> success = nullptr,
+		std::function<void()> fail = nullptr
+		);
+	void playVideo();
+	virtual void onSubjectChanged(int value)override;
+private:
+	void clickCallback(cocos2d::Ref* ref);
+private:
+	std::function<void()> m_success;
+	std::function<void()> m_fail;
+	bool m_bRewardGot;
+	bool m_bIsPlaying;
 };
 
 // TODO:增加显示界面和隐藏界面，增加缓存

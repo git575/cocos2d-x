@@ -5,14 +5,16 @@
 #include "json/allocators.h"
 #include "json/writer.h"
 #include "cocos2d.h"
-
-PublicStatisticObserver::~PublicStatisticObserver()
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#endif
+PublicGameStatisticObserver::~PublicGameStatisticObserver()
 {
-	PublicStatistic::getInstance()->removeObserve(this);
+	PublicGameStatistic::getInstance()->removeObserve(this);
 }
 
 
-void PublicStatistic::init(const std::string& statisticConfig)
+void PublicGameStatistic::init(const std::string& statisticConfig)
 {
 	m_bChanged = false;
 	auto textFileString = PublicGetFileString(statisticConfig);
@@ -61,13 +63,13 @@ void PublicStatistic::init(const std::string& statisticConfig)
 	
 	for (const auto& item : m_TypeMap)
 	{
-		cocos2d::Director::getInstance()->getEventDispatcher()->addCustomEventListener(item.first, CC_CALLBACK_1(PublicStatistic::onStatisticEvent, this));
+		cocos2d::Director::getInstance()->getEventDispatcher()->addCustomEventListener(item.first, CC_CALLBACK_1(PublicGameStatistic::onStatisticEvent, this));
 	}
-	if (!cocos2d::Director::getInstance()->getScheduler()->isScheduled("PublicStatisticSchedule", cocos2d::Director::getInstance())) {
+	if (!cocos2d::Director::getInstance()->getScheduler()->isScheduled("PublicGameStatisticSchedule", cocos2d::Director::getInstance())) {
 
 		cocos2d::Director::getInstance()->getScheduler()->schedule([=](float dt) {
 			this->saveStatistic();
-			}, cocos2d::Director::getInstance(), 0.5f, false, "PublicStatisticSchedule");
+			}, cocos2d::Director::getInstance(), 0.5f, false, "PublicGameStatisticSchedule");
 	}
 
 	for (const auto& item : m_TypeMap)
@@ -90,7 +92,7 @@ void PublicStatistic::init(const std::string& statisticConfig)
 	readStatistic();
 }
 
-void PublicStatistic::saveStatistic()
+void PublicGameStatistic::saveStatistic()
 {
 	if (!m_bChanged) { return; }
 	std::string statisticFile = PublicGetGameName() + "_StatisticSaveData.json";
@@ -123,7 +125,7 @@ void PublicStatistic::saveStatistic()
 	
 }
 
-void PublicStatistic::readStatistic()
+void PublicGameStatistic::readStatistic()
 {
 	std::string statisticFile = PublicGetGameName() + "_StatisticSaveData.json";
 	std::string dataString = PublicGetFileString(statisticFile);
@@ -153,12 +155,12 @@ void PublicStatistic::readStatistic()
 	}
 }
 
-void PublicStatistic::addObserver(const std::string& key, PublicStatisticObserver* obs)
+void PublicGameStatistic::addObserver(const std::string& key, PublicGameStatisticObserver* obs)
 {
 	m_Observers[key].push_back(obs);
 }
 
-void PublicStatistic::removeObserve(const std::string& key, int index)
+void PublicGameStatistic::removeObserve(const std::string& key, int index)
 {
 	if (m_Observers.find(key) == m_Observers.end()) { return; }
 	auto iter = m_Observers[key].begin();
@@ -173,7 +175,7 @@ void PublicStatistic::removeObserve(const std::string& key, int index)
 	}
 }
 
-void PublicStatistic::removeObserve(const std::string& key, PublicStatisticObserver* obs)
+void PublicGameStatistic::removeObserve(const std::string& key, PublicGameStatisticObserver* obs)
 {
 	if (m_Observers.find(key) == m_Observers.end()) { return; }
 	auto iter = m_Observers[key].begin();
@@ -188,7 +190,7 @@ void PublicStatistic::removeObserve(const std::string& key, PublicStatisticObser
 	}
 }
 
-void PublicStatistic::removeObserve(PublicStatisticObserver* obs)
+void PublicGameStatistic::removeObserve(PublicGameStatisticObserver* obs)
 {
 	for (auto iter = m_Observers.begin(); iter != m_Observers.end(); ++iter)
 	{
@@ -207,25 +209,25 @@ void PublicStatistic::removeObserve(PublicStatisticObserver* obs)
 	}
 }
 
-int PublicStatistic::getStatisticInt(const std::string& key)
+int PublicGameStatistic::getStatisticInt(const std::string& key)
 {
 	if (m_IntMap.find(key) == m_IntMap.end()) { return 0; }
 	return m_IntMap[key];
 }
 
-float PublicStatistic::getStatisticFloat(const std::string& key)
+float PublicGameStatistic::getStatisticFloat(const std::string& key)
 {
 	if (m_FloatMap.find(key) == m_FloatMap.end()) { return 0.f; }
 	return m_FloatMap[key];
 }
 
-std::string PublicStatistic::getStatisticString(const std::string& key)
+std::string PublicGameStatistic::getStatisticString(const std::string& key)
 {
 	if (m_StringMap.find(key) == m_StringMap.end()) { return ""; }
 	return m_StringMap[key];
 }
 
-void PublicStatistic::onStatisticEvent(cocos2d::EventCustom* event)
+void PublicGameStatistic::onStatisticEvent(cocos2d::EventCustom* event)
 {
 	auto eventKey = event->getEventName();
 	auto type = m_TypeMap.find(eventKey);
@@ -290,4 +292,27 @@ void PublicStatistic::onStatisticEvent(cocos2d::EventCustom* event)
 		}
 	}
 	
+}
+
+
+
+
+void PublicStatistic::CustomEvent(const std::string& eventId)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+	CCLOG("EventCustom:%s", eventId.c_str());
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo methodInfo;
+	if (cocos2d::JniHelper::getStaticMethodInfo(methodInfo,
+		"org/cocos2dx/cpp/PublicStatistics",  // Java 类路径
+		"logEvent",
+		"(Ljava/lang/String;)V")) {
+
+        jstring jEventId = methodInfo.env->NewStringUTF(eventId.c_str());
+        methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, jEventId);
+        methodInfo.env->DeleteLocalRef(jEventId);
+        methodInfo.env->DeleteLocalRef(methodInfo.classID);
+    }
+#endif
 }

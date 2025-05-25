@@ -38,8 +38,8 @@ std::string PublicFormatString(const char* format, ...)
 	const size_t buffer_size = 1024;
 	char buffer[buffer_size];
 
-	// 使用vsprintf_s来执行格式化操作
-	int n = vsprintf_s(buffer, buffer_size, format, args);
+	// 使用vsnprintf来执行格式化操作
+	int n = vsnprintf(buffer, buffer_size, format, args);
 
 	va_end(args);
 

@@ -4,10 +4,14 @@
 #include "PublicBaseHelper.h"
 #include "PublicStringProcess.h"
 #include "PublicStatistic.h"
+#include "PublicCallJavaMethod.h"
 USING_NS_CC;
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
 //using namespace cocos2d::experimental;
+#endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
 #endif
 
 void PublicInitGame(const std::string& gameName)
@@ -47,12 +51,17 @@ bool PublicRemoveFile(const std::string& path)
 	return FileUtils::getInstance()->removeFile(fullPath);
 }
 
-int PublicRandInt(int min, int max)
+std::mt19937& PublicGetRandomEngine()
 {
 	static std::random_device rd;
-	std::mt19937 gen(rd());
+	static std::mt19937 gen(rd());
+	return gen;
+}
+
+int PublicRandInt(int min, int max)
+{
 	std::uniform_int_distribution<> dis(min, max);
-	return dis(gen);
+	return dis(PublicGetRandomEngine());
 }
 
 void PublicLoadSpriteFrameData(const std::string& plistPath)
@@ -62,6 +71,8 @@ void PublicLoadSpriteFrameData(const std::string& plistPath)
 
 void PublicReturnToStartScene()
 {
+	PublicHideBanner();
+
 	PublicStatic::setString("CUR_GAME", "StartScene");
 	auto scene = StartScene::createScene();
 	// run
@@ -212,6 +223,31 @@ std::string PublicGetTimeString(std::time_t timeStamp, const std::string& format
 	char buffer[80];
 	std::strftime(buffer, sizeof(buffer), format.c_str(), localTime);
 	return std::string(buffer);
+}
+
+void PublicShowBanner()
+{
+	PublicCallMethodVoidVoid("showBanner");
+}
+
+void PublicHideBanner()
+{
+	PublicCallMethodVoidVoid("hideBanner");
+}
+
+void PublicShowInterstital()
+{
+	PublicCallMethodVoidVoid("showInterstitial");
+}
+
+bool PublicIsRewardVideoReady()
+{
+	return PublicCallMethodBoolVoid("isRewardedVideoReady");
+}
+
+void PublicPlayRewardVideo()
+{
+	PublicCallMethodVoidVoid("playRewardVideo");
 }
 
 void PublicStatic::setInt(const std::string& key, int val)

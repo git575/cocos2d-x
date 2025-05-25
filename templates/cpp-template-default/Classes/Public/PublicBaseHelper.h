@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <cstdint>
+#include <random>
 
 // 初始化
 void PublicInitGame(const std::string& gameName);
@@ -21,6 +22,7 @@ std::string PublicGetFileString(const std::string& path);
 // 删除文件
 bool PublicRemoveFile(const std::string& path);
 
+std::mt19937& PublicGetRandomEngine();
 // 随机数[] 
 int PublicRandInt(int min, int max);
 
@@ -105,7 +107,16 @@ private:
 template <class _RanIt>
 void PublicShuffle(_RanIt _First, _RanIt _Last)
 {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::shuffle(_First, _Last, gen);
+	std::shuffle(_First, _Last, PublicGetRandomEngine());
 }
+
+// 显示banner
+void PublicShowBanner();
+// 隐藏banner
+void PublicHideBanner();
+// 显示插页式广告
+void PublicShowInterstital();
+// 激励视频是否准备好
+bool PublicIsRewardVideoReady();
+// 播放激励视频
+void PublicPlayRewardVideo();

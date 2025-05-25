@@ -24,5 +24,14 @@ cmake -G <开发环境("Visual Studio 16 2019")> -A <platform平台(win32 ios an
 Android项目需求
 jdk       8       setting -> gradle -> path_to_jdk_8
 ndk      21     local.properties -> 增加 ndk.dir=path_to_ndk_21
-gradle  gradle-5.1.1-all.zip  自动下载
+gradle  gradle-6.7.1-all.zip  自动下载
 cmake 3.6
+
+第三方sdk
+友盟sdk  -->  修改AndroidManifest.xml  UMENG_APPKEY 和  UMENG_CHANNEL
+谷歌广告服务sdk(admob)  -->  修改AndroidManifest.xml  com.google.android.gms.ads.APPLICATION_ID  
+正式版本要修改项目中的广告id
+
+
+用  ./gradlew build -x lint  打包
+添加新的cpp文件要删除app/.cxx

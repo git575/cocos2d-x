@@ -4,6 +4,7 @@ USING_NS_CC;
 #include "StartScene.h"
 #include "ui/CocosGUI.h"
 #include "PublicBaseHelper.h"
+#include "PublicCallJavaMethod.h"
 
 PublicNumberScrollingData::PublicNumberScrollingData(cocos2d::Label* _ptr, float _from_num, float _to_num, float _total_time, float _delay_time):
 	ptr(_ptr),
@@ -346,4 +347,78 @@ void PublicShowLayer(const std::string& name, cocos2d::Layer* layer)
     {
         layer->setName(name);
     }
+}
+
+VideoButton::VideoButton():
+    m_success(nullptr),
+    m_fail(nullptr),
+    m_bRewardGot(false),
+    m_bIsPlaying(false)
+{
+
+}
+
+VideoButton* VideoButton::create(const std::string& normalImage, const std::string& selectedImage /*= ""*/,
+    const std::string& disableImage /*= ""*/, TextureResType texType /*= TextureResType::LOCAL*/,
+    std::function<void()> success /*= nullptr*/, std::function<void()> fail /*= nullptr */)
+{
+    VideoButton* btn = new (std::nothrow) VideoButton;
+	if (btn && btn->init(normalImage, selectedImage, disableImage, texType))
+	{
+		btn->setZoomScale(0.03f);
+		btn->setCascadeOpacityEnabled(true);
+		btn->autorelease();
+        btn->m_success = success;
+        btn->m_fail = fail;
+        btn->addClickEventListener(CC_CALLBACK_1(VideoButton::clickCallback, btn));
+        PublicJavaStatusManager::getInstance()->addObserver("rewardVideoPlayStatus", btn);
+		return btn;
+	}
+	CC_SAFE_DELETE(btn);
+	return nullptr;
+}
+
+void VideoButton::clickCallback(cocos2d::Ref* ref)
+{
+    CCLOG("VideoButton[click]");
+    if (m_bIsPlaying) { return; }
+    if (!PublicIsRewardVideoReady())
+    {
+        CCLOG("VideoButton[Video Not Ready]");
+        return;
+    }
+    m_bRewardGot = false;
+    m_bIsPlaying = true;
+
+    playVideo();
+}
+
+void VideoButton::playVideo()
+{
+    CCLOG("VideoButton[playVideo]");
+    PublicPlayRewardVideo();
+}
+
+void VideoButton::onSubjectChanged(int value)
+{
+    if (!m_bIsPlaying) { return; }
+    auto btn_name = this->getName();
+    CCLOG("VideoButton[%s]", btn_name.c_str());
+	if (200 == value)
+	{
+		m_bRewardGot = true;
+	}
+	else if (203 == value || 202 == value)
+	{
+		if (m_bRewardGot)
+		{
+			m_success();
+		}
+		else
+		{
+			m_fail();
+		}
+
+		m_bIsPlaying = false;
+	}
 }

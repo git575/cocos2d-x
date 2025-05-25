@@ -5,20 +5,24 @@
 #include <list>
 #include "cocos/base/CCEventCustom.h"
 
-class PublicStatisticObserver
+
+
+class PublicGameStatisticObserver
 {
 public:
 	virtual void onSubjectChanged(const std::string& key, int value) = 0;
 	int getIndex() { return m_observe_index; }
-	PublicStatisticObserver() :m_observe_index(0) {}
-	virtual ~PublicStatisticObserver();
+	PublicGameStatisticObserver() :m_observe_index(0) {}
+	virtual ~PublicGameStatisticObserver();
 private:
 	int m_observe_index;
 };
 
-class PublicStatistic
+
+// 游戏统计数据
+class PublicGameStatistic
 {
-	SINGLETON_IMPLEMENT(PublicStatistic);
+	SINGLETON_IMPLEMENT(PublicGameStatistic);
 public:
 	enum class StatisticType
 	{
@@ -42,10 +46,10 @@ public:
 	void saveStatistic();
 	void readStatistic();
 
-	void addObserver(const std::string& key, PublicStatisticObserver* obs);
+	void addObserver(const std::string& key, PublicGameStatisticObserver* obs);
 	void removeObserve(const std::string& key, int index);
-	void removeObserve(const std::string& key, PublicStatisticObserver* obs);
-	void removeObserve(PublicStatisticObserver* obs);
+	void removeObserve(const std::string& key, PublicGameStatisticObserver* obs);
+	void removeObserve(PublicGameStatisticObserver* obs);
 
 	int getStatisticInt(const std::string& key);
 	float getStatisticFloat(const std::string& key);
@@ -57,6 +61,16 @@ private:
 	std::unordered_map<std::string, int> m_IntMap;
 	std::unordered_map<std::string, float> m_FloatMap;
 	std::unordered_map<std::string, std::string> m_StringMap;
-	std::unordered_map <std::string, std::list<PublicStatisticObserver*>> m_Observers;
+	std::unordered_map <std::string, std::list<PublicGameStatisticObserver*>> m_Observers;
 	bool m_bChanged;
+};
+
+
+
+
+// 统计上报
+class PublicStatistic
+{
+public:
+	static void CustomEvent(const std::string& eventId);
 };
