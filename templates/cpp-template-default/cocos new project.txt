@@ -33,5 +33,6 @@ cmake 3.6
 正式版本要修改项目中的广告id
 
 
-用  ./gradlew build -x lint  打包
+cd /path/to/your/cocos2dx/project/proj.android
+用  gradlew build -x lint  打包
 添加新的cpp文件要删除app/.cxx
