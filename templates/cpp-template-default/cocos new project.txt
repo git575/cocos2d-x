@@ -32,7 +32,13 @@ cmake 3.6
 谷歌广告服务sdk(admob)  -->  修改AndroidManifest.xml  com.google.android.gms.ads.APPLICATION_ID  
 正式版本要修改项目中的广告id
 
-
+打包
+方法一:   cocos compile -s /path/to/your/project -p <平台 android/其他> -m <模式 debug/release> -o <path/to/output>  <打aab包  --android-studio --app-bundle> \
+<带签名  --sign /path/to/your_sign.jks \
+  --storePassword 你的密钥库密码 \
+  --keyAlias 你的别名 \
+  --keyPassword 你的密钥密码>
+方法二:
 cd /path/to/your/cocos2dx/project/proj.android
 用  gradlew build -x lint  打包
 添加新的cpp文件要删除app/.cxx
