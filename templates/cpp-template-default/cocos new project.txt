@@ -33,12 +33,12 @@ cmake 3.6
 正式版本要修改项目中的广告id
 
 打包
-方法一:   cocos compile -s /path/to/your/project -p <平台 android/其他> -m <模式 debug/release> -o <path/to/output>  <打aab包  --android-studio --app-bundle> \
-<带签名  --sign /path/to/your_sign.jks \
-  --storePassword 你的密钥库密码 \
-  --keyAlias 你的别名 \
-  --keyPassword 你的密钥密码>
-方法二:
 cd /path/to/your/cocos2dx/project/proj.android
-用  gradlew build -x lint  打包
+gradlew build -x lint  打包apk
+gradlew clean bundleRelease -x lint  清空缓存，100%构建正式包
 添加新的cpp文件要删除app/.cxx
+
+game.jks
+2@L0buv=elVP9jj_rBow
+game0
+as9Aabh9#a9yo5rUz8ff
