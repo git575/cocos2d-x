@@ -1,16 +1,16 @@
 /******************************************************************************
  * Spine Runtimes License Agreement
- * Last updated July 28, 2023. Replaces all prior versions.
+ * Last updated January 1, 2020. Replaces all prior versions.
  *
- * Copyright (c) 2013-2023, Esoteric Software LLC
+ * Copyright (c) 2013-2020, Esoteric Software LLC
  *
  * Integration of the Spine Runtimes into software or otherwise creating
  * derivative works of the Spine Runtimes is permitted under the terms and
  * conditions of Section 2 of the Spine Editor License Agreement:
  * http://esotericsoftware.com/spine-editor-license
  *
- * Otherwise, it is permitted to integrate the Spine Runtimes into software or
- * otherwise create derivative works of the Spine Runtimes (collectively,
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
  * "Products"), provided that each user of the Products must obtain their own
  * Spine Editor license and redistribution of the Products in any form must
  * include this license and copyright notice.
@@ -23,8 +23,8 @@
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
  * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THE
- * SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #ifndef Spine_RotateTimeline_h
@@ -33,28 +33,37 @@
 #include <spine/CurveTimeline.h>
 
 namespace spine {
-	class SP_API RotateTimeline : public CurveTimeline1 {
+	class SP_API RotateTimeline : public CurveTimeline {
 		friend class SkeletonBinary;
-
 		friend class SkeletonJson;
-
 		friend class AnimationState;
 
-	RTTI_DECL
+		RTTI_DECL
 
 	public:
-		explicit RotateTimeline(size_t frameCount, size_t bezierCount, int boneIndex);
+		static const int ENTRIES = 2;
 
-		virtual void
-		apply(Skeleton &skeleton, float lastTime, float time, Vector<Event *> *pEvents, float alpha, MixBlend blend,
-			  MixDirection direction);
+		explicit RotateTimeline(int frameCount);
 
-		int getBoneIndex() { return _boneIndex; }
+		virtual void apply(Skeleton& skeleton, float lastTime, float time, Vector<Event*>* pEvents, float alpha, MixBlend blend, MixDirection direction);
 
-		void setBoneIndex(int inValue) { _boneIndex = inValue; }
+		virtual int getPropertyId();
+
+		/// Sets the time and value of the specified keyframe.
+		void setFrame(int frameIndex, float time, float degrees);
+
+		int getBoneIndex();
+		void setBoneIndex(int inValue);
+
+		Vector<float>& getFrames();
 
 	private:
+		static const int PREV_TIME = -2;
+		static const int PREV_ROTATION = -1;
+		static const int ROTATION = 1;
+
 		int _boneIndex;
+		Vector<float> _frames; // time, angle, ...
 	};
 }
 

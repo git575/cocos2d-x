@@ -1,6 +1,6 @@
 # spine-cpp
 
-The spine-cpp runtime provides basic functionality to load and manipulate [spine](http://esotericsoftware.com) skeletal animation data using C++. It does not perform rendering but can be extended to enable spine animations for other projects that utilize C++.
+The spine-cpp runtime provides basic functionality to load and manipulate [spine](http://esotericsoftware.com) skeletal animation data using C++. It does not perform rendering but can be extended to enable spine animations for other projects that utilize C++. Note, this library uses C++03 for maximum portability and therefore does not take advantage of any C++11 or newer features such as std::unique_ptr.
 
 ## Licensing
 
@@ -14,7 +14,7 @@ For the official legal terms governing the Spine Runtimes, please read the [Spin
 
 ## Spine version
 
-spine-cpp works with data exported from spine 4.2.xx.
+spine-cpp works with data exported from spine 3.8.xx.
 
 spine-cpp supports all spine features.
 
@@ -24,7 +24,6 @@ spine-cpp supports all spine features.
 2. Copy the contents of the `spine-cpp/spine-cpp/src` and `spine-cpp/spine-cpp/include` directories into your project. Be sure your header search is configured to find the contents of the `spine-cpp/spine-cpp/include` directory. Note that the includes use `spine/Xxx.h`, so the `spine` directory cannot be omitted when copying the files.
 
 ## Usage
-
 ### [Please see the spine-cpp guide for full documentation](http://esotericsoftware.com/spine-cpp)
 
 ## Extension
@@ -49,8 +48,7 @@ class MyTextureLoader : public spine::TextureLoader
 ```
 
 ## Runtimes extending spine-cpp
-- [spine-glfw](../spine-glfw)
-- [spine-sdl](../spine-sdl)
+
 - [spine-sfml](../spine-sfml/cpp)
 - [spine-cocos2dx](../spine-cocos2dx)
-- [spine-ue](../spine-ue)
+- [spine-ue4](../spine-ue4)
